@@ -27,6 +27,7 @@ class BaseModel():
         self.model_names = []
         self.visual_names = []
         self.image_paths = []
+        self.loss_output_path = os.path.join(self.save_dir, 'losses.csv')
 
     def set_input(self, input):
         self.input = input

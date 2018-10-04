@@ -16,6 +16,12 @@ if __name__ == '__main__':
     visualizer = Visualizer(opt)
     total_steps = 0
 
+    with open(model.loss_output_path, "a") as lossfh:
+        row = 'epoch'
+        for k in model.loss_names:
+            row += ',' + str(k)
+        lossfh.write(row + '\n')
+
     for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
         epoch_start_time = time.time()
         iter_data_time = time.time()
@@ -51,6 +57,14 @@ if __name__ == '__main__':
         if epoch % opt.save_epoch_freq == 0:
             print('saving the model at the end of epoch %d, iters %d' %
                   (epoch, total_steps))
+            losses = model.get_current_losses()
+
+            with open(model.loss_output_path, "a") as lossfh:
+                row = str(epoch)
+                for v in losses.values():
+                    row += ',' + str(v)
+                lossfh.write(row + '\n')
+
             model.save_networks('latest')
             model.save_networks(epoch)
 
